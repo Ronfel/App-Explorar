@@ -1,0 +1,28 @@
+.rating-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+.rating-star {
+  color: #d1d5db;
+  cursor: pointer;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.rating-star.selected {
+  color: #f59e0b;
+}
+
+.rating-input:focus-visible + .rating-star {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+  border-radius: 2px;
+}

@@ -19,7 +19,7 @@ export class Categoria {
   }
 
   salvar(){
-    this.camposForm.markAllAsTouched;
+    this.camposForm.markAllAsTouched();
     
     if(this.camposForm.valid){
       this.service
@@ -30,7 +30,7 @@ export class Categoria {
             this.camposForm.reset();
           },
           error: erro => console.error('Ocorreu um erro: ', erro) 
-        })
+        });
     }
   }
 

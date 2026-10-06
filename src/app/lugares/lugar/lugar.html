@@ -66,20 +66,34 @@
             </span>
         </div>
 
-        <div class="mb-4">
-            <label for="avaliacao" class="block text-gray-600 font-medium mb-2">Avaliação</label>
-            <input type="number"
-                   id="avaliacao"
-                   name="avaliacao"
-                   formControlName="avaliacao"
-                   placeholder="Informe a avaliação"
-                   class="w-full p-3 border border-gray-300 rounded shadow-sm focus:ring focus:ring-blue-400"
-                   required
-            />
+        <fieldset class="mb-4">
+            <legend class="block text-gray-600 font-medium mb-2">Avaliação</legend>
+            <div class="flex items-center gap-1" role="radiogroup" aria-label="Avaliação de 1 a 5 estrelas">
+                <ng-container *ngFor="let estrelas of [1, 2, 3, 4, 5]">
+                    <input
+                           class="rating-input"
+                           type="radio"
+                           [id]="'avaliacao-' + estrelas"
+                           name="avaliacao"
+                           formControlName="avaliacao"
+                           [value]="estrelas"
+                           [attr.aria-label]="estrelas + (estrelas === 1 ? ' estrela' : ' estrelas')"
+                           required
+                    />
+                    <label
+                           class="rating-star"
+                           [class.selected]="camposForm.get('avaliacao')?.value >= estrelas"
+                           [for]="'avaliacao-' + estrelas"
+                           [attr.aria-hidden]="true"
+                    >
+                        ★
+                    </label>
+                </ng-container>
+            </div>
             <span class="text-red-500 text-sm" *ngIf="isCampoInvalido('avaliacao')">
-                Campo Obrigatório
+                Selecione uma avaliação de 1 a 5 estrelas
             </span>
-        </div>
+        </fieldset>
 
         <button type="submit" class="w-full bg-blue-600 text-white font-semibold p-3 rounded shadow hover:bg-blue-700">
             Cadastrar Lugar
