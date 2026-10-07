@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { LayoutProps } from './layoutprops';
 import { ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-layout',
@@ -11,11 +12,9 @@ import { filter } from 'rxjs/operators';
 })
 export class Layout implements OnInit {
   props: LayoutProps = {titulo: '', subtitulo: ''}
-
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute
-  ){}
+  private readonly router = inject(Router);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly authService = inject(AuthService);
 
   ngOnInit(): void {
     this.props = this.obterPropriedadeLayout();
@@ -39,5 +38,14 @@ export class Layout implements OnInit {
       titulo: propriedades.titulo ?? '',
       subtitulo: propriedades.subtitulo ?? ''
     };
+  }
+
+  async sair(): Promise<void> {
+    try {
+      await this.authService.sair();
+      await this.router.navigateByUrl('/');
+    } catch (error) {
+      console.error('Erro ao sair:', error);
+    }
   }
 }
