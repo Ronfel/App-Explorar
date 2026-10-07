@@ -9,15 +9,18 @@ const routes: Routes = [
     children:[
       {
         path: 'categorias',
-        loadChildren: () => import('../categorias/categorias-module').then(m => m.CategoriasModule)
+        loadChildren: () => import('../categorias/categorias-module').then(m => m.CategoriasModule),
+        data: {titulo: 'Categorias', subtitulo: 'Realize o cadastro de novas categorias'}
       },
       {
         path: 'lugares',
-        loadChildren: () => import('../lugares/lugares-module').then(m => m.LugaresModule)
+        loadChildren: () => import('../lugares/lugares-module').then(m => m.LugaresModule),
+        data: {titulo: 'Lugares', subtitulo: 'Realize o cadastro de novos lugares'}
       },
       {
         path: 'galeria',
-        loadChildren: () => import('../galeria/galeria-module').then(m => m.GaleriaModule)
+        loadChildren: () => import('../galeria/galeria-module').then(m => m.GaleriaModule),
+        data: {titulo: 'Galeria', subtitulo: 'Uma coleção dos lugares que você salvou.'}
       }      
     ]
   }
