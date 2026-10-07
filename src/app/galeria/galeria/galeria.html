@@ -45,18 +45,20 @@
 
 	<section class="place-grid" *ngIf="!carregando() && !erro() && lugaresPaginados().length > 0" aria-label="Lugares salvos">
 		<article class="place-card" *ngFor="let lugar of lugaresPaginados()">
-			<img class="place-photo" [src]="lugar.urlFoto" [alt]="'Foto de ' + lugar.nome" />
-			<div class="place-details">
-				<h3>{{ lugar.nome }}</h3>
-				<div class="place-rating" [attr.aria-label]="'Avaliação: ' + (lugar.avaliacao || 0) + ' de 5 estrelas'">
-					<span
-						*ngFor="let estrela of estrelas"
-						[class.filled]="estrela <= (lugar.avaliacao || 0)"
-						aria-hidden="true"
-					>★</span>
-					<span class="rating-value">{{ lugar.avaliacao || 0 }}/5</span>
+			<a class="place-link" [routerLink]="['/paginas/galeria', lugar.id]" [attr.aria-label]="'Ver detalhes de ' + lugar.nome">
+				<img class="place-photo" [src]="lugar.urlFoto" [alt]="'Foto de ' + lugar.nome" />
+				<div class="place-details">
+					<h3>{{ lugar.nome }}</h3>
+					<div class="place-rating" [attr.aria-label]="'Avaliação: ' + (lugar.avaliacao || 0) + ' de 5 estrelas'">
+						<span
+							*ngFor="let estrela of estrelas"
+							[class.filled]="estrela <= (lugar.avaliacao || 0)"
+							aria-hidden="true"
+						>★</span>
+						<span class="rating-value">{{ lugar.avaliacao || 0 }}/5</span>
+					</div>
 				</div>
-			</div>
+			</a>
 		</article>
 	</section>
 

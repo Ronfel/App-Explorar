@@ -1,0 +1,42 @@
+<main class="detail-page">
+    <a class="detail-back" routerLink="/paginas/galeria">Voltar para a galeria</a>
+
+    <p class="detail-message" *ngIf="carregando()" role="status">Carregando detalhes...</p>
+    <p class="detail-message detail-error" *ngIf="erro()" role="alert">
+        Não foi possível carregar os detalhes deste lugar.
+    </p>
+    <p class="detail-message" *ngIf="naoEncontrado()" role="alert">
+        Este lugar não foi encontrado.
+    </p>
+
+    <article class="detail-content" *ngIf="lugar(); let lugar">
+        <img class="detail-photo" [src]="lugar.urlFoto" [alt]="'Foto de ' + lugar.nome" />
+        <div class="detail-information">
+            <p class="detail-category">{{ lugar.categoria }}</p>
+            <h1>{{ lugar.nome }}</h1>
+
+            <dl class="detail-facts">
+                <div>
+                    <dt>Localização</dt>
+                    <dd>{{ lugar.localizacao || 'Não informada' }}</dd>
+                </div>
+                <div>
+                    <dt>Avaliação</dt>
+                    <dd>
+                        <span
+                            class="detail-rating"
+                            [attr.aria-label]="'Avaliação: ' + (lugar.avaliacao || 0) + ' de 5 estrelas'"
+                        >
+                            <span
+                                *ngFor="let estrela of estrelas"
+                                [class.filled]="estrela <= (lugar.avaliacao || 0)"
+                                aria-hidden="true"
+                            >★</span>
+                            <span class="rating-value">{{ lugar.avaliacao || 0 }}/5</span>
+                        </span>
+                    </dd>
+                </div>
+            </dl>
+        </div>
+    </article>
+</main>

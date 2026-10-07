@@ -16,4 +16,8 @@ export class LugarService {
     obterTodos(): Observable<Lugar[]>{
         return this.http.get<Lugar[]>('http://localhost:3000/lugares');
     }
+
+    obterPorId(id: string): Observable<Lugar>{
+        return this.http.get<Lugar>(`http://localhost:3000/lugares/${encodeURIComponent(id)}`);
+    }
 }
