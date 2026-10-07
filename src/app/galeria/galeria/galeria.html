@@ -6,8 +6,30 @@
 			<p class="gallery-description">Uma coleção dos lugares que você salvou.</p>
 		</div>
 		<span class="place-count" *ngIf="!carregando() && !erro()">
-			{{ lugares().length }} {{ lugares().length === 1 ? 'lugar' : 'lugares' }}
+			{{ lugaresFiltrados().length }} {{ lugaresFiltrados().length === 1 ? 'lugar' : 'lugares' }}
 		</span>
+	</div>
+
+	<div class="gallery-toolbar" *ngIf="!carregando() && !erro() && lugares().length > 0">
+		<div class="filter-control">
+			<label for="name-filter">Nome do lugar</label>
+			<input
+				id="name-filter"
+				type="search"
+				placeholder="Buscar lugar..."
+				[value]="nomePesquisado()"
+				(input)="alterarNome($event)"
+			/>
+		</div>
+		<div class="filter-control">
+			<label for="category-filter">Categoria</label>
+			<select id="category-filter" [value]="categoriaSelecionada()" (change)="alterarCategoria($event)">
+				<option value="">Todas as categorias</option>
+				<option *ngFor="let categoria of categoriasDisponiveis()" [value]="categoria">
+					{{ categoria }}
+				</option>
+			</select>
+		</div>
 	</div>
 
 	<p class="gallery-message" *ngIf="carregando()" role="status">Carregando lugares...</p>
@@ -17,9 +39,12 @@
 	<p class="gallery-message" *ngIf="!carregando() && !erro() && lugares().length === 0">
 		Nenhum lugar salvo por enquanto. Cadastre um lugar para começar sua galeria.
 	</p>
+	<p class="gallery-message" *ngIf="!carregando() && !erro() && lugares().length > 0 && lugaresFiltrados().length === 0">
+		Nenhum lugar encontrado. Ajuste a busca ou a categoria.
+	</p>
 
-	<section class="place-grid" *ngIf="!carregando() && !erro() && lugares().length > 0" aria-label="Lugares salvos">
-		<article class="place-card" *ngFor="let lugar of lugares()">
+	<section class="place-grid" *ngIf="!carregando() && !erro() && lugaresPaginados().length > 0" aria-label="Lugares salvos">
+		<article class="place-card" *ngFor="let lugar of lugaresPaginados()">
 			<img class="place-photo" [src]="lugar.urlFoto" [alt]="'Foto de ' + lugar.nome" />
 			<div class="place-details">
 				<h3>{{ lugar.nome }}</h3>
@@ -34,4 +59,14 @@
 			</div>
 		</article>
 	</section>
+
+	<nav class="gallery-pagination" *ngIf="!carregando() && !erro() && totalPaginas() > 1" aria-label="Paginação da galeria">
+		<button type="button" [disabled]="paginaAtual() === 1" (click)="irParaPagina(paginaAtual() - 1)">
+			Anterior
+		</button>
+		<span aria-live="polite">Página {{ paginaAtual() }} de {{ totalPaginas() }}</span>
+		<button type="button" [disabled]="paginaAtual() === totalPaginas()" (click)="irParaPagina(paginaAtual() + 1)">
+			Próxima
+		</button>
+	</nav>
 </main>

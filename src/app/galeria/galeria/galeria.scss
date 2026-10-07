@@ -38,10 +38,80 @@
 	font-size: 0.9rem;
 }
 
+.gallery-toolbar {
+	display: flex;
+	align-items: end;
+	flex-wrap: wrap;
+	gap: 0.75rem;
+	margin-bottom: 1.25rem;
+}
+
+.filter-control {
+	display: grid;
+	gap: 0.4rem;
+	min-width: min(100%, 240px);
+}
+
+.filter-control label {
+	color: #344b54;
+	font-size: 0.9rem;
+	font-weight: 600;
+}
+
+.filter-control input,
+.filter-control select {
+	width: 100%;
+	min-width: 210px;
+	padding: 0.55rem 0.75rem;
+	border: 1px solid #cbd8d5;
+	border-radius: 4px;
+	background: #fff;
+	color: #172b35;
+}
+
+.filter-control input:focus-visible,
+.filter-control select:focus-visible {
+	outline: 2px solid #0f766e;
+	outline-offset: 2px;
+}
+
 .place-grid {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
 	gap: 1.25rem;
+}
+
+.gallery-pagination {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
+	margin-top: 1.75rem;
+}
+
+.gallery-pagination button {
+	min-width: 96px;
+	padding: 0.55rem 0.8rem;
+	border: 1px solid #cbd8d5;
+	border-radius: 4px;
+	background: #fff;
+	color: #172b35;
+	cursor: pointer;
+}
+
+.gallery-pagination button:hover:not(:disabled) {
+	border-color: #0f766e;
+	color: #0f766e;
+}
+
+.gallery-pagination button:disabled {
+	color: #8a9995;
+	cursor: not-allowed;
+}
+
+.gallery-pagination span {
+	color: #52636b;
+	font-size: 0.9rem;
 }
 
 .place-card {
@@ -109,5 +179,11 @@
 	.gallery-heading {
 		align-items: start;
 		flex-direction: column;
+	}
+
+	.gallery-toolbar {
+		align-items: stretch;
+		flex-direction: column;
+		gap: 0.4rem;
 	}
 }
