@@ -5,7 +5,8 @@ import { Categoria } from './categoria/categoria';
 const routes: Routes = [
   {
     path: '',
-    component: Categoria
+    component: Categoria,
+    pathMatch: 'full'    
   }
 ];
 
