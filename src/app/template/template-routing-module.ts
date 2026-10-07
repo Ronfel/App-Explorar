@@ -14,7 +14,11 @@ const routes: Routes = [
       {
         path: 'lugares',
         loadChildren: () => import('../lugares/lugares-module').then(m => m.LugaresModule)
-      }
+      },
+      {
+        path: 'categoria',
+        loadChildren: () => import('../galeria/galeria-module').then(m => m.GaleriaModule)
+      }      
     ]
   }
 ];
