@@ -1,23 +1,49 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { from, defer, map, Observable } from 'rxjs';
+import { get, push, ref, set } from 'firebase/database';
 import { Lugar } from './lugar';
-import { Observable } from 'rxjs';
+import { getRealtimeDatabase, snapshotToArray } from '../auth/firebase-database';
 
 @Injectable({
     providedIn: 'root'
 })
 export class LugarService {
-    constructor(private http: HttpClient){ }
+    salvar(lugar: Lugar): Observable<Lugar> {
+        return defer(() => {
+            const lugarRef = push(ref(getRealtimeDatabase(), 'lugares'));
+            const id = lugarRef.key;
+            if (!id) {
+                throw new Error('Não foi possível gerar um identificador para o lugar.');
+            }
 
-    salvar(lugar: Lugar): Observable<Lugar>{
-        return this.http.post<Lugar>('http://localhost:3000/lugares', lugar);
+            const dadosLugar = { ...lugar };
+            delete dadosLugar.id;
+
+            return from(set(lugarRef, dadosLugar)).pipe(
+                map(() => ({ ...dadosLugar, id }))
+            );
+        });
     }
 
-    obterTodos(): Observable<Lugar[]>{
-        return this.http.get<Lugar[]>('http://localhost:3000/lugares');
+    obterTodos(): Observable<Lugar[]> {
+        return defer(() =>
+            from(get(ref(getRealtimeDatabase(), 'lugares'))).pipe(
+                map(snapshot => snapshotToArray<Lugar>(snapshot))
+            )
+        );
     }
 
-    obterPorId(id: string): Observable<Lugar>{
-        return this.http.get<Lugar>(`http://localhost:3000/lugares/${encodeURIComponent(id)}`);
+    obterPorId(id: string): Observable<Lugar | null> {
+        return defer(() =>
+            from(get(ref(getRealtimeDatabase(), `lugares/${id}`))).pipe(
+                map(snapshot => {
+                    if (!snapshot.exists()) {
+                        return null;
+                    }
+
+                    return { ...snapshot.val(), id: snapshot.key ?? id } as Lugar;
+                })
+            )
+        );
     }
 }

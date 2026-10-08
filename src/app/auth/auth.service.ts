@@ -17,7 +17,9 @@ export class AuthService {
   readonly profile = signal<Profile | null>(null);
   readonly carregando = signal(true);
   readonly erro = signal('');
-  readonly configurado = Object.values(firebaseConfig).every(value => value.trim().length > 0);
+  readonly configurado = Object.entries(firebaseConfig)
+    .filter(([key]) => key !== 'databaseURL')
+    .every(([, value]) => value.trim().length > 0);
 
   private auth: Auth | null = null;
   private authReady: Promise<void>;

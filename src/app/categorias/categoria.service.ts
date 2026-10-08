@@ -1,19 +1,35 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { from, defer, map, Observable } from 'rxjs';
+import { get, push, ref, set } from 'firebase/database';
 import { Categoria } from './categoria';
-import { Observable } from 'rxjs';
+import { getRealtimeDatabase, snapshotToArray } from '../auth/firebase-database';
 
 @Injectable({
     providedIn: 'root'
 })
 export class CategoriaService {
-    constructor(private http: HttpClient){ }
+    salvar(categoria: Categoria): Observable<Categoria> {
+        return defer(() => {
+            const categoriaRef = push(ref(getRealtimeDatabase(), 'categorias'));
+            const id = categoriaRef.key;
+            if (!id) {
+                throw new Error('Não foi possível gerar um identificador para a categoria.');
+            }
 
-    salvar(categoria: Categoria): Observable<Categoria>{
-        return this.http.post<Categoria>('http://localhost:3000/categorias', categoria);
+            const dadosCategoria = { ...categoria };
+            delete dadosCategoria.id;
+
+            return from(set(categoriaRef, dadosCategoria)).pipe(
+                map(() => ({ ...dadosCategoria, id }))
+            );
+        });
     }
 
-    obterTodas(): Observable<Categoria[]>{
-        return this.http.get<Categoria[]>('http://localhost:3000/categorias');
+    obterTodas(): Observable<Categoria[]> {
+        return defer(() =>
+            from(get(ref(getRealtimeDatabase(), 'categorias'))).pipe(
+                map(snapshot => snapshotToArray<Categoria>(snapshot))
+            )
+        );
     }
 }

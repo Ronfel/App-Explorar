@@ -31,13 +31,16 @@ export class DetalheLugar implements OnInit {
 
     this.lugarService.obterPorId(id).subscribe({
       next: lugar => {
-        this.lugar.set(lugar);
+        if (!lugar) {
+          this.naoEncontrado.set(true);
+        } else {
+          this.lugar.set(lugar);
+        }
         this.carregando.set(false);
       },
       error: erro => {
         console.error('Erro ao carregar detalhes do lugar:', erro);
-        this.naoEncontrado.set(erro.status === 404);
-        this.erro.set(erro.status !== 404);
+        this.erro.set(true);
         this.carregando.set(false);
       }
     });
