@@ -6,6 +6,11 @@
 /out-tsc
 /bazel-out
 /api
+/comandos
+.firebaserc
+firebase.json
+firebase.config.ts
+/.firebase
 
 # Node
 /node_modules
